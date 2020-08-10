@@ -1,6 +1,8 @@
 import praw
 import os
 import time
+import RMPScraperTool
+import Courses
 
 # Using .env file to read environmental variables
 from dotenv import load_dotenv
@@ -18,17 +20,28 @@ def main():
     subreddit = reddit.subreddit("UIUC")
     keyphrase = "!prof"
     
-    for comment in subreddit.stream.comments():
-        try :
-            if (keyphrase in comment.body) :
-                comment.reply("yay")
-                print("Sd")
-        except :
-            print("triedd")
+    course_list = Courses.load_data( "2020-fa.csv")
+    for submission in subreddit.stream.submissions():             
         
-
-    
-
+        b = set()
+        for course in course_list:
+            
+            course_check = course.subject + " " + course.number
+            instructor = course.instructor
+            
+            if (course_check, instructor) not in b:
+                b.add((course_check, instructor)) 
+            else :
+                continue
+            #print(course_check)
+            if course_check in submission.selftext:
+                for comment in submission.comments:           
+                    try :
+                        if keyphrase in comment.body:                                   
+                            comment.reply(f"Take this class {course_check} with {instructor} ")
+                            print("Sd")
+                    except :
+                        print("triedd")
     return
 
 """

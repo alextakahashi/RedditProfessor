@@ -11,15 +11,19 @@ class Courses:
         self.instructor = instructor
 
 # constains the list of courses and its associated attributes
-course_list = []
-
+course_list = set()
 
 def load_data(directory):
     """
     Load data from CSV files into memory.
     """
     # Load courses
-    with open(f"{directory}/2020-fa.csv", encoding="utf-8") as f:
+    
+    if directory is None:
+        directory = "2020-fa.csv"
+    
+    #removed f string replaced with normal string 
+    with open(directory, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             subject = row["Subject"]
@@ -29,6 +33,6 @@ def load_data(directory):
             instructor = row["Instructors"]
 
             # creating a course instance and appending it to the list
-            course_list.append(Courses(subject, number, name, description, instructor))
-
+            course_list.add(Courses(subject, number, name, description, instructor))
+    return course_list
 # TODO: Do what is required with the course list
