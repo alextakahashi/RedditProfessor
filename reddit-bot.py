@@ -15,7 +15,7 @@ def main():
                          password = "shadowaaries1752",
                          user_agent = "RedditProfessor")
     
-    subreddit = reddit.subreddit("memes")
+    subreddit = reddit.subreddit("UIUC")
     keyphrase = "!prof"
     
     for comment in subreddit.stream.comments():
