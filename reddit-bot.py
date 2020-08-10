@@ -24,7 +24,7 @@ def main():
                 comment.reply("yay")
                 print("Sd")
         except :
-            print("tried")   
+            print("triedd")
         
 
     
@@ -35,7 +35,7 @@ def main():
 if __name__ == '__initializeBot__':
     initializeBot() 
 """
-    
+
 
 if __name__ == '__main__':
     main()
