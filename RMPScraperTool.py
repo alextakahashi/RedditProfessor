@@ -20,6 +20,8 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 
+# Retrieved from: https://github.com/illinois/reddit-uiuc-bot/blob/master/reddit-gpa-bot.py
+
 import requests
 import json
 import math
