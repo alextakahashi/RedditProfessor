@@ -8,7 +8,6 @@ from Courses import load_data
 from dotenv import load_dotenv
 load_dotenv()
 
-# TODO: initialize the reddit bot
 def main():
     print("Ce")
     reddit = praw.Reddit(client_id = "4Fmc8A0V4diHiw", 
@@ -37,7 +36,9 @@ def main():
             if course_check in submission.selftext:
                 for comment in submission.comments:           
                     try :
-                        if keyphrase in comment.body:                                   
+                        if keyphrase in comment.body:
+                            # TODO: Check all the professors from the set with the same course and suggest 
+                            # the professor with the best rating                                   
                             comment.reply(f"Take this class {course_check} with {instructor} ")
                             print("Sd")
                     except :
