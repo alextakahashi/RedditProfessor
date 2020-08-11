@@ -14,7 +14,7 @@ class RateMyProfWebScraper:
         self.teacherName = teacher
         self.index = -1
         self.schoolId = schoolId
-        self.schoolName
+        self.schoolName = schoolName
 
 
     def retrieveRMPInfo(self):
@@ -41,7 +41,6 @@ class RateMyProfWebScraper:
             for i in pageDataTemp:
                 new_url = "https://www.ratemyprofessors.com/" + i
                 url_list.append(new_url)
-                print(new_url)
             page = requests.get(url_list[0])
             soup = BeautifulSoup(page.text, 'html.parser')          
             rating_list = soup.find_all(class_ = 'RatingValue__Numerator-qw8sqy-2 gxuTRq')
@@ -64,7 +63,7 @@ class RateMyProfWebScraper:
     def getTakeAgain(self):
       return self.takeAgain
 
-ScrapeObject = RateMyProfWebScraper(schoolId=1112, teacher="Geoffrey Herman")
+ScrapeObject = RateMyProfWebScraper(1112, "Geoffrey Herman", "University of Illinois")
 ScrapeObject.retrieveRMPInfo()
 rating = ScrapeObject.getRMPInfo()
 print(rating)
