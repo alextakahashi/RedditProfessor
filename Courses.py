@@ -20,9 +20,6 @@ def load_course_data(directory):
     
     # Load courses
     
-    if directory is None:
-        directory = "2020-fa.csv"
-    
     # Removed f string replaced with normal string 
     with open(directory, encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -39,5 +36,11 @@ def load_course_data(directory):
 # Returns the course data
 def get_course_data():
     # This will have to be updated after every semester
-    load_course_data("2020-fa.csv")
+    directory = input("Input your csv file with professors ")
+    print(directory)
+    if directory == '':
+            directory = "2020-fa.csv"    
+    load_course_data(directory)
     return course_list
+
+

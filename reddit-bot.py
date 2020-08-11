@@ -1,13 +1,15 @@
 import praw
 import os
 import time
-import RMPScraperTool
-from Courses import load_data
+##from RMPScraperTool import RateMyProfScraper
+##import RateMyProfessorPyAPI
+from demo import RateMyProfAPI
+import numpy
+from Courses import get_course_data
 
 # Using .env file to read environmental variables
 from dotenv import load_dotenv
 load_dotenv()
-
 def main():
     print("Ce")
     reddit = praw.Reddit(client_id = "4Fmc8A0V4diHiw", 
@@ -19,15 +21,20 @@ def main():
     subreddit = reddit.subreddit("UIUC")
     keyphrase = "!prof"
     
-    course_list = load_data( "2020-fa.csv")
+    course_list = get_course_data()
+    
     for submission in subreddit.stream.submissions():             
         
         b = set()
         for course in course_list:
             
             course_check = course.subject + " " + course.number
-            instructor = course.instructor
+            if course.instructor != '' or course.instructor !=' ':
+                a = course.instructor.split(",")
+            if (len(a) == 1 or a[0] == ''):
+                continue
             
+            instructor = a[0].strip() + " " + a[1].strip()           
             if (course_check, instructor) not in b:
                 b.add((course_check, instructor)) 
             else :
@@ -35,15 +42,18 @@ def main():
             #print(course_check)
             if course_check in submission.selftext:
                 for comment in submission.comments:           
-                    try :
+               
                         if keyphrase in comment.body:
                             # TODO: Check all the professors from the set with the same course and suggest 
-                            # the professor with the best rating                                   
-                            comment.reply(f"Take this class {course_check} with {instructor} ")
-                            print("Sd")
-                    except :
-                        print("triedd")
-    return
+                            # the professor with the best rating
+                            
+                            print("before")
+                            aapi = RateMyProfAPI(schoolId=1112, teacher=instructor)
+                            aapi.retrieveRMPInfo()
+                            rating = aapi.getRMPInfo()                                                   
+                            comment.reply(f"Class : {course_check}. Instructor RMP rating : {rating}")
+                        
+                   
 
 """
 if __name__ == '__initializeBot__':
