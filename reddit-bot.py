@@ -1,7 +1,7 @@
 import praw
 import os
 import time
-import RMPScraperTool
+from RMPScraperTool import RateMyProfScraperTool
 from Courses import get_course_data
 
 # Using .env file to read environmental variables
@@ -37,9 +37,17 @@ def main():
                 for comment in submission.comments:           
                     try :
                         if keyphrase in comment.body:
+                            # Based on the university, different ID number can be inputted as the parameter
+                            # http://www.ratemyprofessors.com/campusRatings.jsp?sid=1112 is the link to RMP of UIUC
+                            rmp = RateMyProfScraperTool(1112)
+                            rmp.SearchProfessor(instructor)
+                            professor_detail = rmp.PrintProfessorDetail("overall_rating")
+
+                            comment.reply(f"Class: {course_check}, Instructor and rating {professor_detail} ")
+
                             # TODO: Check all the professors from the set with the same course and suggest 
                             # the professor with the best rating                                   
-                            comment.reply(f"Take this class {course_check} with {instructor} ")
+                            # comment.reply(f"Take this class {course_check} with {instructor} ")
                             print("Sd")
                     except :
                         print("triedd")
