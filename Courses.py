@@ -10,19 +10,20 @@ class Courses:
         self.description = description
         self.instructor = instructor
 
-# constains the list of courses and its associated attributes
+# Constains the list of courses and its associated attributes
 course_list = set()
 
-def load_data(directory):
-    """
-    Load data from CSV files into memory.
-    """
+# Reads and stores the course data in a set
+def load_course_data(directory):
+    
+    # Load data from CSV files into memory.
+    
     # Load courses
     
     if directory is None:
         directory = "2020-fa.csv"
     
-    #removed f string replaced with normal string 
+    # Removed f string replaced with normal string 
     with open(directory, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -32,7 +33,11 @@ def load_data(directory):
             description = row["Description"]
             instructor = row["Instructors"]
 
-            # creating a course instance and appending it to the list
+            # Creating a course instance and adding it to the set
             course_list.add(Courses(subject, number, name, description, instructor))
+
+# Returns the course data
+def get_course_data():
+    # This will have to be updated after every semester
+    load_course_data("2020-fa.csv")
     return course_list
-# TODO: Do what is required with the course list
