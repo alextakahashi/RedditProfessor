@@ -24,33 +24,37 @@ def main():
     
     for submission in subreddit.stream.submissions():             
         
-        b = set()
+        course_info_set = set()
         for course in course_list:
             
-            course_check = course.subject + " " + course.number
+            course_type = course.subject + " " + course.number
             if course.instructor != '' or course.instructor !=' ':
                 a = course.instructor.split(",")
             if (len(a) == 1 or a[0] == ''):
                 continue
             
             instructor = a[0].strip() + " " + a[1].strip()           
-            if (course_check, instructor) not in b:
-                b.add((course_check, instructor)) 
+            if (course_type, instructor) not in course_info_set:
+                course_info_set.add((course_type, instructor))
             else :
                 continue
-            #print(course_check)
-            if course_check in submission.selftext:
+            #print(course_type)
+            if course_type in submission.selftext:
                 for comment in submission.comments:           
                
                         if keyphrase in comment.body:
-                            # TODO: Check all the professors from the set with the same course and suggest 
-                            # the professor with the best rating
                             
-                            print("before")
-                            aapi = RateMyProfWebScraper(schoolId=1112, teacher=instructor)
-                            aapi.retrieveRMPInfo()
-                            rating = aapi.getRMPInfo()                                                   
-                            comment.reply(f"Class : {course_check}. Instructor RMP rating : {rating}")
+                            # print("before")
+                            rmp_info = RateMyProfWebScraper(
+                                schoolId=1112, teacher=instructor, schoolName="University of Illinois")
+                            rmp_info.retrieveRMPInfo()
+                            prof_rating = rmp_info.getRMPRating()
+                            percent_taking_again = rmp_info.getTakeAgainPercent() 
+                            print(instructor)
+                            # TODO: Limit showing the info to only one time
+                            comment.reply(f"Take {course_type} with {instructor}."
+                            + f"\n{instructor}'s rating is {prof_rating}."
+                            + f"\n{percent_taking_again} of students would take this class again!")
                         
                    
 
