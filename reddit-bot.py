@@ -1,9 +1,7 @@
 import praw
 import os
 import time
-##from RMPScraperTool import RateMyProfScraper
-##import RateMyProfessorPyAPI
-from demo import RateMyProfAPI
+from RMPScraperTool import RateMyProfWebScraper
 import numpy
 from Courses import get_course_data
 
@@ -48,7 +46,7 @@ def main():
                             # the professor with the best rating
                             
                             print("before")
-                            aapi = RateMyProfAPI(schoolId=1112, teacher=instructor)
+                            aapi = RateMyProfWebScraper(schoolId=1112, teacher=instructor)
                             aapi.retrieveRMPInfo()
                             rating = aapi.getRMPInfo()                                                   
                             comment.reply(f"Class : {course_check}. Instructor RMP rating : {rating}")
