@@ -64,9 +64,9 @@ class RateMyProfWebScraper:
     def getTakeAgain(self):
       return self.takeAgain
 
-aapi = RateMyProfWebScraper(schoolId=1112, teacher="Geoffrey Herman")
-aapi.retrieveRMPInfo()
-rating = aapi.getRMPInfo()
+ScrapeObject = RateMyProfWebScraper(schoolId=1112, teacher="Geoffrey Herman")
+ScrapeObject.retrieveRMPInfo()
+rating = ScrapeObject.getRMPInfo()
 print(rating)
-takeAgain = aapi.getTakeAgain()
+takeAgain = ScrapeObject.getTakeAgain()
 print(takeAgain)
