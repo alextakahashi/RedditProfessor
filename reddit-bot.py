@@ -2,7 +2,7 @@ import praw
 import os
 import time
 import RMPScraperTool
-import Courses
+from Courses import load_data
 
 # Using .env file to read environmental variables
 from dotenv import load_dotenv
@@ -20,7 +20,7 @@ def main():
     subreddit = reddit.subreddit("UIUC")
     keyphrase = "!prof"
     
-    course_list = Courses.load_data( "2020-fa.csv")
+    course_list = load_data( "2020-fa.csv")
     for submission in subreddit.stream.submissions():             
         
         b = set()
