@@ -8,6 +8,7 @@ from Courses import get_course_data
 # Using .env file to read environmental variables
 from dotenv import load_dotenv
 load_dotenv()
+
 def main():
     print("Ce")
     reddit = praw.Reddit(client_id = "4Fmc8A0V4diHiw", 

@@ -3,10 +3,12 @@ from lxml import etree
 import logging
 from bs4 import BeautifulSoup
 import json
+
 INFO_NOT_AVAILABLE = "Info currently not available"
+
 class RateMyProfWebScraper:
 
-    #school id 45 = Arizona State University, the ID is initialized to 45 if not set upon usage.
+    #school id 1112 = University of Illinois at Urbana-Champaign.
     def __init__(self, schoolId, teacher, schoolName):
         self.pageData = ""
         self.rating = ""
