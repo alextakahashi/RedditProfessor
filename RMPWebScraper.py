@@ -116,8 +116,3 @@ class RateMyProfWebScraper:
     def getTakeAgain(self):
         return self.takeAgain
   
-
-scraper = RateMyProfWebScraper(1112, "Lin, P", "University Of Illinois at Urbana-Champaign")
-scraper.retrieveRMPInfo()
-rating = scraper.getRMPInfo()    
-print(rating)
