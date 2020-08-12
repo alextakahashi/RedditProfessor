@@ -85,6 +85,9 @@ class RateMyProfWebScraper:
             elif len(parameters) == 1:
                 self.takeAgain = "Information not available"
                 self.difficulty = parameters[0].contents[0]
+            elif len(parameters) == 0:
+                self.takeAgain = "Information not available"
+                self.difficulty = "N/A"
             
             
 
@@ -134,4 +137,5 @@ class RateMyProfWebScraper:
     def getDifficulty(self):
         print(self.difficulty)
         return self.difficulty
+
   

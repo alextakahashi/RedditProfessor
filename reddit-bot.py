@@ -23,7 +23,7 @@ def main():
                          user_agent="RedditProfessor")
 
     subreddit = reddit.subreddit("testingground4bots")
-    keyphrase = "!prof"
+    keyphrase = "!prof "
     replied_to = []  # List to store ID's of comments replied to by bot
     instructors_shown = []  # List to store professors whose ratings have already been commented for that class
 
@@ -32,58 +32,67 @@ def main():
     for submission in subreddit.stream.submissions():
 
         b = set()
-        for course in course_list:
-            course_name = course.subject + " " + course.number
-            if len(course.instructor) != 0:
-                instructor = course.instructor
-            else:
-                continue
-            if (course_name, instructor) not in b:
-                b.add((course_name, instructor))
-            else:
-                continue
+        # for course in course_list:
+            # course_name = course.subject + " " + course.number
+            # if len(course.instructor) != 0:
+            #    instructor = course.instructor
+            # else:
+            #    continue
+            # if (course_name, instructor) not in b:
+            #    b.add((course_name, instructor))
+            # else:
+            #    continue
             # print(course_check)
-            if course_name in submission.selftext:
-                for comment in submission.comments:
-                    if keyphrase in comment.body:
-                        # TODO: Check all the professors from the set with the same course and suggest
-                        # the professor with the best rating
+            # if course_name in submission.selftext:
+        for comment in submission.comments:
+            if keyphrase in comment.body:
+                # TODO: Check all the professors from the set with the same course and suggest
+                # the professor with the best rating
+                coursetitle = comment.body.replace(keyphrase, '')   # "!prof CS 173" becomes "CS 173"
+                coursesubj = coursetitle.split()[0]     # "CS"
+                coursenum = coursetitle.split()[1]      # "173"
+                for course in course_list:
+                    if course.subject == coursesubj and course.number == coursenum:     # Match our "CS" and "173" with those in CSV
+                        instructor = course.instructor
+                        course_name = course.subject + " " + course.number
+                        if (course_name, instructor) not in b:
+                            b.add((course_name, instructor))
 
-                        print(instructor)
-                        if not comment.saved:
-                            if (comment.id not in replied_to) and (instructor not in instructors_shown):
-                                scraper = RateMyProfWebScraper(1112, instructor,
-                                                               "University Of Illinois at Urbana-Champaign")
-                                scraper.retrieveRMPInfo()
-                                prof_rating = scraper.getRMPInfo()
-                                if prof_rating[0] == "T":                     
-                                    comment.reply(f"The professor teaching {course_name} is {instructor}."
+                            print(instructor)
+                            if not comment.saved:
+                                if (comment.id not in replied_to) and (instructor not in instructors_shown):
+                                    scraper = RateMyProfWebScraper(1112, instructor,
+                                                                   "University Of Illinois at Urbana-Champaign")
+                                    scraper.retrieveRMPInfo()
+                                    prof_rating = scraper.getRMPInfo()
+                                    if prof_rating[0] == "T":
+                                        print(f"The professor teaching {course_name} is {instructor}."
                                               + f"\nHe/She doesn't exist in the RMP directory ")
-                                    continue                               
-                                   
-                                percent_taking_again = scraper.getTakeAgain()
-                                difficulty = scraper.getDifficulty()
-                                comment.reply(f"Take {course_name} with {instructor}."
-                                              + f"\n\n{instructor}'s rating is: {prof_rating}."
-                                              # + f"\n\n The course difficulty is: {difficulty}"
-                                              + f"\n\n{percent_taking_again} of students would take this class again.")
-                                replied_to.append(comment.id)  # Adds comment ID in replied_to to prevent re-replying
-                                # Adds instructor in list so that we don't stop at 1 comment if there are
-                                # multiple instructors on RMP for this same course.
-                                instructors_shown.append(instructor)
-                                comment.save()
-                                print('Bot replying to: ')  # prints to console for our information
+                                        continue
 
-                                print("Title: ", submission.title)
+                                    percent_taking_again = scraper.getTakeAgain()
+                                    difficulty = scraper.getDifficulty()
+                                    comment.reply(f"Take {course_name} with {instructor}."
+                                                  + f"\n\n{instructor}'s rating is: {prof_rating}."
+                                                  + f"\n\n The course difficulty is: {difficulty}"
+                                                  + f"\n\n{percent_taking_again} of students would take this class again.")
+                                    replied_to.append(comment.id)  # Adds comment ID in replied_to to prevent re-replying
+                                    # Adds instructor in list so that we don't stop at 1 comment if there are
+                                    # multiple instructors on RMP for this same course.
+                                    instructors_shown.append(instructor)
+                                    comment.save()
+                                    print('Bot replying to: ')  # prints to console for our information
 
-                                print("Text: ", submission.selftext)
+                                    print("Title: ", submission.title)
 
-                                print("Score: ", submission.score)
+                                    print("Text: ", submission.selftext)
 
-                                print("---------------------------------")
+                                    print("Score: ", submission.score)
 
-                                print()
-                instructors_shown = []
+                                    print("---------------------------------")
+
+                                    print()
+                        instructors_shown = []
 
 
 if __name__ == '__main__':
