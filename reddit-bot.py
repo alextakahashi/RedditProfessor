@@ -27,12 +27,10 @@ def main():
         for course in course_list:
             
             course_check = course.subject + " " + course.number
-            if course.instructor != '' or course.instructor !=' ':
-                a = course.instructor.split(",")
-            if (len(a) == 1 or a[0] == ''):
+            if course.instructor != '' or course.instructor !=' ':            
+                instructor = course.instructor         
+            else :
                 continue
-            
-            instructor = a[0].strip() + " " + a[1].strip()           
             if (course_check, instructor) not in b:
                 b.add((course_check, instructor)) 
             else :
@@ -45,10 +43,10 @@ def main():
                             # TODO: Check all the professors from the set with the same course and suggest 
                             # the professor with the best rating
                             
-                            print("before")
-                            aapi = RateMyProfWebScraper(schoolId=1112, teacher=instructor)
-                            aapi.retrieveRMPInfo()
-                            rating = aapi.getRMPInfo()                                                   
+                            print(instructor)
+                            scraper = RateMyProfWebScraper(1112, instructor, "University Of Illinois at Urbana-Champaign")
+                            scraper.retrieveRMPInfo()
+                            rating = scraper.getRMPInfo()                                                   
                             comment.reply(f"Class : {course_check}. Instructor RMP rating : {rating}")
                         
                    
