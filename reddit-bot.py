@@ -54,8 +54,10 @@ def main():
                                               + f"\nHe/She doesn't exist in the RMP directory ")
                                 continue
                             percent_taking_again = scraper.getTakeAgain()
+                            difficulty = scraper.getDifficulty()
                             comment.reply(f"Take {course_name} with {instructor}."
                             + f"\n{instructor}'s rating is {prof_rating}."
+                            +f"\n The difficulty is {difficulty}"
                             + f"\n{percent_taking_again} of students would take this class again!")                                                   
                         
                    

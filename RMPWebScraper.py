@@ -4,12 +4,13 @@ from lxml import etree
 import logging
 from bs4 import BeautifulSoup
 import json
-INFO_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory"
+INFO_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory for this school"
 class RateMyProfWebScraper:
     def __init__(self, schoolId, teacher, schoolName):
         self.pageData = ""
         self.rating = ""
         self.takeAgain = ""
+        self.difficulty = ""
         self.teacherName = teacher
         self.index = -1
         self.schoolId = schoolId
@@ -75,11 +76,15 @@ class RateMyProfWebScraper:
             page = requests.get(required_url)
             soup = BeautifulSoup(page.text, 'html.parser')          
             rating_list = soup.find_all(class_ = 'RatingValue__Numerator-qw8sqy-2 gxuTRq')            
-            take_again = soup.find_all(class_ = 'FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf')            
+            parameters = soup.find_all(class_ = 'FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf')
+            #difficulty = soup.find_all(class_ = "FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf")          
             self.rating = rating_list[0].contents[0]              
-            self.takeAgain = take_again[0].contents[0] 
-            ###if self.takeAgain[len(self.takeAgain) - 1] != "%":
-            ### self.takeAgain = "Information not available"
+            self.takeAgain = parameters[0].contents[0] 
+            self.difficulty = parameters[1].contents[0]
+            if self.takeAgain[len(self.takeAgain) - 1] != "%":
+                self.takeAgain = "Information not available"
+            if self.difficulty[len(self.takeAgain) - 1] == "":
+                self.difficulty= "Information not available"            
             print(self.takeAgain + "  this is take gain")        
 
     def searchUrlMaker(self, name_list):
@@ -110,12 +115,16 @@ class RateMyProfWebScraper:
         """
         :return: RMP rating.
         """
-
+        print (self.rating)
         if self.rating == INFO_NOT_AVAILABLE:
             return INFO_NOT_AVAILABLE
         return self.rating + "/5.0"
     
     def getTakeAgain(self):
+        print(self.takeAgain)
         return self.takeAgain
+    
+    def getDifficulty(self):
+        print(self.difficulty)
+        return self.getDifficulty
   
-
