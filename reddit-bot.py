@@ -57,7 +57,7 @@ def main():
                             difficulty = scraper.getDifficulty()
                             comment.reply(f"Take {course_name} with {instructor}."
                             + f"\n{instructor}'s rating is {prof_rating}."
-                            +f"\n The difficulty is {difficulty}"
+                            + f"\n The course difficulty is {difficulty}"
                             + f"\n{percent_taking_again} of students would take this class again!")                                                   
                         
                    
