@@ -76,8 +76,10 @@ class RateMyProfWebScraper:
             soup = BeautifulSoup(page.text, 'html.parser')          
             rating_list = soup.find_all(class_ = 'RatingValue__Numerator-qw8sqy-2 gxuTRq')            
             take_again = soup.find_all(class_ = 'FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf')            
-            self.rating = rating_list[0].contents[0]  
+            self.rating = rating_list[0].contents[0]              
             self.takeAgain = take_again[0].contents[0] 
+            ###if self.takeAgain[len(self.takeAgain) - 1] != "%":
+            ### self.takeAgain = "Information not available"
             print(self.takeAgain + "  this is take gain")        
 
     def searchUrlMaker(self, name_list):
@@ -102,7 +104,7 @@ class RateMyProfWebScraper:
         return url, lName, fName
     def profNotAvailable(self):
         self.rating = INFO_NOT_AVAILABLE
-        self.getTakeAgain = ""
+        self.takeAgain = ""
 
     def getRMPInfo(self):
         """
@@ -116,3 +118,4 @@ class RateMyProfWebScraper:
     def getTakeAgain(self):
         return self.takeAgain
   
+

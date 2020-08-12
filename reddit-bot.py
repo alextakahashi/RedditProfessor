@@ -1,5 +1,7 @@
 import praw
 import os
+import string
+
 import time
 from RMPWebScraper import RateMyProfWebScraper
 import numpy
@@ -45,13 +47,13 @@ def main():
                             scraper = RateMyProfWebScraper(1112, instructor, "University Of Illinois at Urbana-Champaign")
                             scraper.retrieveRMPInfo()
                             prof_rating = scraper.getRMPInfo()
-                            if isinstance(prof_rating, string):
+                            try :
+                                check = int(prof_rating[0])
+                            except :                                
                                 comment.reply(f"The professor teaching {course_name} is {instructor}."
                                               + f"\nHe/She doesn't exist in the RMP directory ")
                                 continue
-                                
-                            
-                            percent = scraper.getTakeAgain()
+                            percent_taking_again = scraper.getTakeAgain()
                             comment.reply(f"Take {course_name} with {instructor}."
                             + f"\n{instructor}'s rating is {prof_rating}."
                             + f"\n{percent_taking_again} of students would take this class again!")                                                   
