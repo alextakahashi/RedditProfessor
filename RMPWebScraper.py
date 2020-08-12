@@ -76,18 +76,15 @@ class RateMyProfWebScraper:
             soup = BeautifulSoup(page.text, 'html.parser')          
             rating_list = soup.find_all(class_ = 'RatingValue__Numerator-qw8sqy-2 gxuTRq')            
             parameters = soup.find_all(class_ = 'FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf')
-            #difficulty = soup.find_all(class_ = "FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf")    
-                  
-            self.rating = rating_list[0].contents[0]              
-            self.takeAgain = parameters[0].contents[0] 
-            self.difficulty = parameters[1].contents[0]
-
-            if self.takeAgain[len(self.takeAgain) - 1] != "%":
+            #difficulty = soup.find_all(class_ = "FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf") 
+            self.rating = rating_list[0].contents[0]      
+            if len(parameters) == 2:           
+                self.takeAgain = parameters[0].contents[0] 
+                self.difficulty = parameters[1].contents[0]
+            elif len(parameters) == 1:
                 self.takeAgain = "Information not available"
-
-            if self.difficulty[len(self.takeAgain) - 1] == "":
-                self.difficulty = "Information not available"  
-
+                self.difficulty = parameters[0].contents[0]
+            ##Do the opposite for take again and difficulty
             print(self.takeAgain + "  this is take gain")        
 
     # Returns the url, first name, and the last name related to the professor
@@ -134,5 +131,5 @@ class RateMyProfWebScraper:
     # Returns the difficulty rating of the class
     def getDifficulty(self):
         print(self.difficulty)
-        return self.getDifficulty
+        return self.difficulty
   

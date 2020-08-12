@@ -47,9 +47,7 @@ def main():
                             scraper = RateMyProfWebScraper(1112, instructor, "University Of Illinois at Urbana-Champaign")
                             scraper.retrieveRMPInfo()
                             prof_rating = scraper.getRMPInfo()
-                            try :
-                                check = int(prof_rating[0])
-                            except :                                
+                            if prof_rating[0] == "T":                     
                                 comment.reply(f"The professor teaching {course_name} is {instructor}."
                                               + f"\nHe/She doesn't exist in the RMP directory ")
                                 continue
