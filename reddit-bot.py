@@ -24,7 +24,7 @@ def initialize_bot():
                          password="shadowaaries1752",
                          user_agent="RedditProfessor")
 
-    subreddit = reddit.subreddit("testingground4bots")
+    subreddit = reddit.subreddit("bottest")
     keyphrase = "!prof "
 
     return subreddit, keyphrase
@@ -59,47 +59,79 @@ def main():
     instructors_shown = []  # List to store professors whose ratings have already been commented for that class.
 
     course_list = get_course_data()
+    getFromComment(course_list, keyphrase)   
 
-    for submission in subreddit.stream.submissions():
 
+def getFromComment(course_list, keyphrase):
+    
+    subreddit, keyphrase = initialize_bot()
+    for comment in subreddit.stream.comments():
         b = set()
-        for comment in submission.comments:
-            if keyphrase in comment.body:
-                # TODO: Check all the professors from the set with the same course and suggest
-                # the professor with the best rating
-                coursetitle = comment.body.replace(keyphrase, '')  # "!prof CS 173" becomes "CS 173"
-                coursesubj = coursetitle.split()[0]  # "CS"
-                coursenum = coursetitle.split()[1]  # "173"
-
-                for course in course_list:
-                    if course.subject == coursesubj and course.number == coursenum:  # Match "CS" and "173" with CSV
-                        instructor = course.instructor
-                        course_name = course.subject + " " + course.number
-
-                        if (course_name, instructor) not in b:
-                            b.add((course_name, instructor))
-
-                            print(instructor)
-                            if not comment.saved:
-                                if (comment.id not in replied_to) and (instructor not in instructors_shown):
-                                    # if (bot_reply(course_name, instructor) == False):
-                                    #    continue
-
-                                    comment.reply(bot_reply(course_name, instructor))
-                                    replied_to.append(comment.id)  # Adds comment ID in replied_to.
-                                    # Adds instructor in list so that we don't stop at 1 comment if
-                                    # there are multiple instructors on RMP for this same course.
-                                    instructors_shown.append(instructor)
+        if keyphrase in comment.body:
+            # TODO: Check all the professors from the set with the same course and suggest
+            # the professor with the best rating
+            checkForComment = True
+            print("check for comment is true")
+            print(comment.body)
+            
+            if len(comment.body) < 6 : 
+                """                  
+                if comment in comments_read_list:                    
+                # comment.save()
+                    comments_read_list.add(comment)              
+                    getFromPost(course_list, keyphrase)
+                    """
+                continue        
+            
+            coursetitle = comment.body.replace(keyphrase, '')   # "!prof CS 173" becomes "CS 173"
+            print(coursetitle.split())
+            coursesubj = coursetitle.split()[0]     # "CS"
+            coursenum = coursetitle.split()[1]      # "173"            
+            print(coursetitle)
+            for course in course_list:
+                if course.subject == coursesubj and course.number == coursenum:
+                    
+                    if course.instructor != '' or course.instructor !=' ':            
+                        instructor = course.instructor         
+                    else :
+                        continue
+                    course_name = course.subject + " " + course.number
+                    if (course_name, instructor) not in b:
+                        b.add((course_name, instructor))
+                        if not comment.saved:
+                                print(course_name)
+                                scraper = RateMyProfWebScraper(1112, instructor,
+                                                            "University Of Illinois at Urbana-Champaign")
+                                scraper.retrieve_rmp_info()
+                                prof_rating = scraper.get_rmp_info()
+                                if prof_rating[0] == "T":
+                                    comment.reply(f"The professor teaching {course_name} is {instructor}."
+                                        + f"\nHe/She doesn't exist in the RMP directory ")                                   
                                     comment.save()
+                                    continue
+                                percent_taking_again = scraper.get_take_again()
+                                difficulty = scraper.get_difficulty()
+                                comment.reply(f"Take {course_name} with {instructor}."
+                                            + f"\n\n{instructor}'s rating is: {prof_rating}."
+                                            + f"\n\n The course difficulty is: {difficulty}"
+                                            + f"\n\n{percent_taking_again} of students would take this class again.")
+                                 # Adds comment ID in replied_to to prevent re-replying
+                                # Adds instructor in list so that we don't stop at 1 comment if there are
+                                # multiple instructors on CSV for this same course.
+                                comment.save()
+                                print('Bot replying to: ')  # prints to console for our information
 
-                                    print('Bot replying to: ')  # prints bot reply info to log.
-                                    print("Title: ", submission.title)
-                                    print("Text: ", submission.selftext)
-                                    print("Score: ", submission.score)
-                                    print("---------------------------------")
+                                print("Title: ",comment.body)
 
-                                    print()
-                        instructors_shown = []
+                                print("---------------------------------")
+
+                                print()
+                    instructors_shown = []
+  
+
+
+
+
 
 
 if __name__ == '__main__':
