@@ -133,4 +133,4 @@ class RateMyProfWebScraper:
     # Returns the difficulty rating of the class
     def get_difficulty(self):
         print(self.difficulty)
-        return self.difficulty
+        return self.difficulty + "/5.0"

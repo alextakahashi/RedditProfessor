@@ -40,9 +40,9 @@ def bot_reply(course, instructor):
     difficulty = scraper.get_difficulty()
 
     if prof_rating[0] == "T":
-        print(f"The professor teaching {course} is {instructor}."
-              + f"\nHe/She doesn't exist in the RMP directory ")
-        return False
+        reply = (f"The professor teaching {course} is {instructor}."
+                 + f"\nHe/She doesn't exist in the RMP directory ")
+        return reply
 
     reply = (f"Found a professor for {course} on RateMyProfessor for you!"
              + f"\n\n Instructor {instructor}'s rating is: {prof_rating}."
@@ -82,8 +82,8 @@ def main():
                             print(instructor)
                             if not comment.saved:
                                 if (comment.id not in replied_to) and (instructor not in instructors_shown):
-                                    if (bot_reply(course_name, instructor) == False):
-                                        continue
+                                    # if (bot_reply(course_name, instructor) == False):
+                                    #    continue
 
                                     comment.reply(bot_reply(course_name, instructor))
                                     replied_to.append(comment.id)  # Adds comment ID in replied_to.
