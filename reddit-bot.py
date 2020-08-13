@@ -51,18 +51,7 @@ def bot_reply(course, instructor):
 
     return reply
 
-
-def main():
-    subreddit, keyphrase = initialize_bot()
-
-    replied_to = []  # List to store ID's of comments replied to by bot to stop re-replying.
-    instructors_shown = []  # List to store professors whose ratings have already been commented for that class.
-
-    course_list = get_course_data()
-    getFromComment(course_list, keyphrase)   
-
-
-def getFromComment(course_list, keyphrase):
+def get_from_comment(course_list, keyphrase):
     
     subreddit, keyphrase = initialize_bot()
     for comment in subreddit.stream.comments():
@@ -95,44 +84,35 @@ def getFromComment(course_list, keyphrase):
                         instructor = course.instructor         
                     else :
                         continue
+
                     course_name = course.subject + " " + course.number
                     if (course_name, instructor) not in b:
                         b.add((course_name, instructor))
                         if not comment.saved:
-                                print(course_name)
-                                scraper = RateMyProfWebScraper(1112, instructor,
-                                                            "University Of Illinois at Urbana-Champaign")
-                                scraper.retrieve_rmp_info()
-                                prof_rating = scraper.get_rmp_info()
-                                if prof_rating[0] == "T":
-                                    comment.reply(f"The professor teaching {course_name} is {instructor}."
-                                        + f"\nHe/She doesn't exist in the RMP directory ")                                   
-                                    comment.save()
-                                    continue
-                                percent_taking_again = scraper.get_take_again()
-                                difficulty = scraper.get_difficulty()
-                                comment.reply(f"Take {course_name} with {instructor}."
-                                            + f"\n\n{instructor}'s rating is: {prof_rating}."
-                                            + f"\n\n The course difficulty is: {difficulty}"
-                                            + f"\n\n{percent_taking_again} of students would take this class again.")
-                                 # Adds comment ID in replied_to to prevent re-replying
-                                # Adds instructor in list so that we don't stop at 1 comment if there are
-                                # multiple instructors on CSV for this same course.
-                                comment.save()
-                                print('Bot replying to: ')  # prints to console for our information
+                            print(course_name)
+                            comment.reply(bot_reply(course_name, instructor))
+                            # Adds comment ID in replied_to to prevent re-replying
+                            # Adds instructor in list so that we don't stop at 1 comment if there are
+                            # multiple instructors on CSV for this same course.
+                            comment.save()
+                            print('Bot replying to: ')  # prints to console for our information
 
-                                print("Title: ",comment.body)
+                            print("Title: ",comment.body)
 
-                                print("---------------------------------")
+                            print("---------------------------------")
 
-                                print()
+                            print()
                     instructors_shown = []
-  
 
 
+def main():
+    subreddit, keyphrase = initialize_bot()
 
+    replied_to = []  # List to store ID's of comments replied to by bot to stop re-replying.
+    instructors_shown = []  # List to store professors whose ratings have already been commented for that class.
 
-
+    course_list = get_course_data()
+    get_from_comment(course_list, keyphrase)   
 
 if __name__ == '__main__':
     main()
