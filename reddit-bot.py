@@ -96,6 +96,7 @@ def getFromComment(course_list, keyphrase):
                         instructor = course.instructor         
                     else :
                         continue
+
                     course_name = course.subject + " " + course.number
                     if (course_name, instructor) not in b:
                         b.add((course_name, instructor))
@@ -157,6 +158,8 @@ def getFromPost(course_list, keyphrase) :
     
     
 
+    course_list = get_course_data()
+    get_from_comment(course_list, keyphrase)   
 
 if __name__ == '__main__':    
     while True:
