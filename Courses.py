@@ -42,6 +42,6 @@ def get_course_data():
     directory = input("Input your csv file with professors ")
     print(directory)
     if directory == '':
-        directory = "2020-fa.csv"
+        directory = "course_data/2020-fa.csv"
     load_course_data(directory)
     return course_list
