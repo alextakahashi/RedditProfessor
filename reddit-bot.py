@@ -53,21 +53,22 @@ def bot_reply(course, instructor):
 
 
 def main():
+    print("hjhhjhj")
     subreddit, keyphrase = initialize_bot()
-
     replied_to = []  # List to store ID's of comments replied to by bot to stop re-replying.
     instructors_shown = []  # List to store professors whose ratings have already been commented for that class.
-
     course_list = get_course_data()
-    getFromComment(course_list, keyphrase)   
-
+    getFromComment(course_list, keyphrase)
+    time.sleep(15)
+    #getFromPost(course_list, keyphrase)
+    
 
 def getFromComment(course_list, keyphrase):
     
     subreddit, keyphrase = initialize_bot()
     for comment in subreddit.stream.comments():
         b = set()
-        if keyphrase in comment.body:
+        if keyphrase in comment.body and len(comment.body) > 5:
             # TODO: Check all the professors from the set with the same course and suggest
             # the professor with the best rating
             checkForComment = True
@@ -127,12 +128,36 @@ def getFromComment(course_list, keyphrase):
 
                                 print()
                     instructors_shown = []
-  
+                    
+def getFromPost(course_list, keyphrase) :  
+    
+    
+    subreddit, keyphrase = initialize_bot()
+    comments_called = set()
+    print("Second reached")
+    for submission in subreddit.stream.submissions():             
+        b = set()
+        for course in course_list:            
+            course_check = course.subject + " " + course.number
+            if course.instructor != '' or course.instructor !=' ':            
+                instructor = course.instructor         
+            else :
+                continue
+            if (course_check, instructor) not in b:
+                b.add((course_check, instructor)) 
+            else :
+                continue
+            #print(course_check)
+            if course_check in submission.selftext:
+                for comment in submission.comments:                  
+                    if comment in comments_called :
+                        continue
+                    comments_called.add(comment.body)                                       
+                    bot_reply(course, instructor)
+    
+    
 
 
-
-
-
-
-if __name__ == '__main__':
-    main()
+if __name__ == '__main__':    
+    while True:
+        main()
