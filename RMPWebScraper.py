@@ -1,8 +1,7 @@
-import re, requests
-from lxml import etree
-import logging
+import re
+import requests
+
 from bs4 import BeautifulSoup
-import json
 
 INFO_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory for this school"
 
@@ -24,7 +23,7 @@ class RateMyProfWebScraper:
             self.rating = INFO_NOT_AVAILABLE
             return
 
-        url_list = list()
+        # url_list = list()
         if self.index == -1:
             # making request to the RMP page
             name_list = self.schoolName.split(" ")
@@ -56,7 +55,7 @@ class RateMyProfWebScraper:
                 print(last, fInitial)
                 # print(lName, fName)
                 if last == lName and fInitial == fName:
-                    tup = ((lName, prof_ids[i]))
+                    tup = (lName, prof_ids[i])
                     break
 
             print(tup)
@@ -79,8 +78,8 @@ class RateMyProfWebScraper:
             # difficulty = soup.find_all(class_ = "FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf")
 
             self.rating = rating_list[0].contents[0]
-            if len(parameters) == 2:           
-                self.takeAgain = parameters[0].contents[0] 
+            if len(parameters) == 2:
+                self.takeAgain = parameters[0].contents[0]
                 self.difficulty = parameters[1].contents[0]
             elif len(parameters) == 1:
                 self.takeAgain = "Information not available"
@@ -88,8 +87,6 @@ class RateMyProfWebScraper:
             elif len(parameters) == 0:
                 self.takeAgain = "Information not available"
                 self.difficulty = "N/A"
-            
-            
 
             # Returns the url, first name, and the last name related to the professor
 
@@ -108,12 +105,12 @@ class RateMyProfWebScraper:
             school_url_name = school_url_name[0:len(school_url_name) - 1]
 
         print(school_url_name)
-        page = ""
+        # page = ""
         instructor = (self.teacherName.split(","))
         fName = instructor[1].strip()
         lName = instructor[0]
         schoolId = self.schoolId
-        url = f"https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName={school_url_name}&schoolID={schoolId}&query={lName}"
+        url = f"https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName={school_url_name}&schoolID={schoolId}&query={lName} "
 
         return url, lName, fName
 
@@ -137,5 +134,3 @@ class RateMyProfWebScraper:
     def getDifficulty(self):
         print(self.difficulty)
         return self.difficulty
-
-  
