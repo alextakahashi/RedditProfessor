@@ -7,13 +7,13 @@ import numpy
 from RMPWebScraper import RateMyProfWebScraper
 from Courses import get_course_data
 
-
 # Using .env file to read environmental variables
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
 SCHOOL = "University Of Illinois at Urbana-Champaign"
+
 
 # Initializes the bot and returns the subreddit and the keyphrase used to call it
 def initialize_bot():
@@ -29,6 +29,7 @@ def initialize_bot():
 
     return subreddit, keyphrase
 
+
 # Generates a reply from bot about course and professor information
 def bot_reply(course, instructor):
     scraper = RateMyProfWebScraper(1112, instructor, SCHOOL)
@@ -40,46 +41,35 @@ def bot_reply(course, instructor):
 
     if prof_rating[0] == "T":
         print(f"The professor teaching {course} is {instructor}."
-             + f"\nHe/She doesn't exist in the RMP directory ")
+              + f"\nHe/She doesn't exist in the RMP directory ")
         return False
 
     reply = (f"Found a professor for {course} on RateMyProfessor for you!"
-            + f"\n\n Instructor {instructor}'s rating is: {prof_rating}."
-            + f"\n\n The course difficulty is: {difficulty}"
-            + f"\n\n{percent_taking_again} of students would take this class again.")
+             + f"\n\n Instructor {instructor}'s rating is: {prof_rating}."
+             + f"\n\n The course difficulty is: {difficulty}"
+             + f"\n\n{percent_taking_again} of students would take this class again.")
 
     return reply
+
 
 def main():
     subreddit, keyphrase = initialize_bot()
 
-    replied_to = []                 # List to store ID's of comments replied to by bot to stop re-replying.
-    instructors_shown = []          # List to store professors whose ratings have already been commented for that class.
+    replied_to = []  # List to store ID's of comments replied to by bot to stop re-replying.
+    instructors_shown = []  # List to store professors whose ratings have already been commented for that class.
 
     course_list = get_course_data()
 
     for submission in subreddit.stream.submissions():
 
         b = set()
-        # for course in course_list:
-        # course_name = course.subject + " " + course.number
-        # if len(course.instructor) != 0:
-        #    instructor = course.instructor
-        # else:
-        #    continue
-        # if (course_name, instructor) not in b:
-        #    b.add((course_name, instructor))
-        # else:
-        #    continue
-        # print(course_check)
-        # if course_name in submission.selftext:
         for comment in submission.comments:
             if keyphrase in comment.body:
                 # TODO: Check all the professors from the set with the same course and suggest
                 # the professor with the best rating
-                coursetitle = comment.body.replace(keyphrase, '')       # "!prof CS 173" becomes "CS 173"
-                coursesubj = coursetitle.split()[0]                     # "CS"
-                coursenum = coursetitle.split()[1]                      # "173"
+                coursetitle = comment.body.replace(keyphrase, '')  # "!prof CS 173" becomes "CS 173"
+                coursesubj = coursetitle.split()[0]  # "CS"
+                coursenum = coursetitle.split()[1]  # "173"
 
                 for course in course_list:
                     if course.subject == coursesubj and course.number == coursenum:  # Match "CS" and "173" with CSV
@@ -102,7 +92,7 @@ def main():
                                     instructors_shown.append(instructor)
                                     comment.save()
 
-                                    print('Bot replying to: ')     # prints bot reply info to log.
+                                    print('Bot replying to: ')  # prints bot reply info to log.
                                     print("Title: ", submission.title)
                                     print("Text: ", submission.selftext)
                                     print("Score: ", submission.score)

@@ -57,7 +57,7 @@ class RateMyProfWebScraper:
                 print(last, fInitial)
                 # print(lName, fName)
                 if last == lName and fInitial == fName:
-                    tup = ((lName, prof_ids[i]))
+                    tup = (lName, prof_ids[i])
                     break
 
             print(tup)
@@ -77,11 +77,10 @@ class RateMyProfWebScraper:
             soup = BeautifulSoup(page.text, 'html.parser')
             rating_list = soup.find_all(class_='RatingValue__Numerator-qw8sqy-2 gxuTRq')
             parameters = soup.find_all(class_='FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf')
-            # difficulty = soup.find_all(class_ = "FeedbackItem__FeedbackNumber-uof32n-1 bGrrmf")
 
             self.rating = rating_list[0].contents[0]
-            if len(parameters) == 2:           
-                self.take_again = parameters[0].contents[0] 
+            if len(parameters) == 2:
+                self.take_again = parameters[0].contents[0]
                 self.difficulty = parameters[1].contents[0]
             elif len(parameters) == 1:
                 self.take_again = "Information not available"
