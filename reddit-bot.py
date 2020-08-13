@@ -1,10 +1,10 @@
 import praw
 import os
 import string
-
 import time
-from RMPWebScraper import RateMyProfWebScraper
 import numpy
+
+from RMPWebScraper import RateMyProfWebScraper
 from Courses import get_course_data
 
 
@@ -63,15 +63,15 @@ def main():
                                 if (comment.id not in replied_to) and (instructor not in instructors_shown):
                                     scraper = RateMyProfWebScraper(1112, instructor,
                                                                    "University Of Illinois at Urbana-Champaign")
-                                    scraper.retrieveRMPInfo()
-                                    prof_rating = scraper.getRMPInfo()
+                                    scraper.retrieve_rmp_info()
+                                    prof_rating = scraper.get_rmp_info()
                                     if prof_rating[0] == "T":
                                         print(f"The professor teaching {course_name} is {instructor}."
                                               + f"\nHe/She doesn't exist in the RMP directory ")
                                         continue
 
-                                    percent_taking_again = scraper.getTakeAgain()
-                                    difficulty = scraper.getDifficulty()
+                                    percent_taking_again = scraper.get_take_again()
+                                    difficulty = scraper.get_difficulty()
                                     comment.reply(f"Found a professor for {course_name} on RateMyProfessor for you!"
                                                   + f"\n\n Instructor {instructor}'s rating is: {prof_rating}."
                                                   + f"\n\n The course difficulty is: {difficulty}"
@@ -81,14 +81,11 @@ def main():
                                     # there are multiple instructors on RMP for this same course.
                                     instructors_shown.append(instructor)
                                     comment.save()
+
                                     print('Bot replying to: ')                          # prints bot reply info to log.
-
                                     print("Title: ", submission.title)
-
                                     print("Text: ", submission.selftext)
-
                                     print("Score: ", submission.score)
-
                                     print("---------------------------------")
 
                                     print()
