@@ -6,7 +6,7 @@ from lxml import etree
 from bs4 import BeautifulSoup
 import json
 
-INFO_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory for this school"
+PROF_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory for this school"
 
 class RateMyProfWebScraper:
     def __init__(self, schoolId, teacher, schoolName):
@@ -22,7 +22,7 @@ class RateMyProfWebScraper:
     # Initializes data from RMP website
     def retrieve_rmp_info(self):
         if self.teacherName is None or self.teacherName == "":
-            self.rating = INFO_NOT_AVAILABLE
+            self.rating = PROF_NOT_AVAILABLE
             return
 
         url_list = list()
@@ -115,14 +115,14 @@ class RateMyProfWebScraper:
         return url, lName, fName
 
     def prof_not_available(self):
-        self.rating = INFO_NOT_AVAILABLE
+        self.rating = PROF_NOT_AVAILABLE
         self.take_again = ""
 
     # Returns the rating of the professor
     def get_rmp_info(self):
         print(self.rating)
-        if self.rating == INFO_NOT_AVAILABLE:
-            return INFO_NOT_AVAILABLE
+        if self.rating == PROF_NOT_AVAILABLE:
+            return PROF_NOT_AVAILABLE
         return self.rating + "/5.0"
 
     # Returns the percentage of students taking the class again
