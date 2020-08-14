@@ -1,7 +1,7 @@
 import csv
-import sys
 
 
+# Class to read through CSV file data and return information as a list.
 class Courses:
 
     def __init__(self, subject, number, name, description, instructor):

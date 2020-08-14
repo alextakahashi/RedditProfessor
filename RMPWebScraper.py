@@ -1,13 +1,12 @@
-import re, requests
-import logging
-import json
+import re
+import requests
 
-from lxml import etree
 from bs4 import BeautifulSoup
-import json
 
 PROF_NOT_AVAILABLE = "The professor doesn't exist in the RMP directory for this school"
 
+
+# Web scraper to get RateMyProfessor data for any school. Developed using Beautiful Soup 4 library.
 class RateMyProfWebScraper:
     def __init__(self, schoolId, teacher, schoolName):
         self.page_data = ""
@@ -73,6 +72,7 @@ class RateMyProfWebScraper:
                 if tup[1] == i:
                     required_url = "https://www.ratemyprofessors.com/" + i
 
+            # Gets UIUC database from RateMyProfessor
             page = requests.get(required_url)
             soup = BeautifulSoup(page.text, 'html.parser')
             rating_list = soup.find_all(class_='RatingValue__Numerator-qw8sqy-2 gxuTRq')
@@ -114,6 +114,7 @@ class RateMyProfWebScraper:
 
         return url, lName, fName
 
+    # Sets default values when RMP does not have information
     def prof_not_available(self):
         self.rating = PROF_NOT_AVAILABLE
         self.take_again = ""
