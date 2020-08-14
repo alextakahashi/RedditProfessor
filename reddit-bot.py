@@ -13,6 +13,7 @@ from Courses import get_course_data
 # load_dotenv()
 
 SCHOOL = "University Of Illinois at Urbana-Champaign"
+replied_to = set()
 
 
 # Initializes the bot and returns the subreddit and the keyphrase used to call it
@@ -25,7 +26,7 @@ def initialize_bot():
                          user_agent="RedditProfessor")
 
     subreddit = reddit.subreddit("bottest")
-    keyphrase = "!prof "
+    keyphrase = "!prof"
 
     return subreddit, keyphrase
 
@@ -40,6 +41,8 @@ def bot_reply(course, instructor):
     difficulty = scraper.get_difficulty()
 
     if prof_rating[0] == "T":
+        if len(instructor) == 0 or len(instructor) == 1:
+                instructor = "not decided yet"       
         reply = (f"The professor teaching {course} is {instructor}."
                  + f"\nHe/She doesn't exist in the RMP directory ")
         return reply
@@ -67,23 +70,37 @@ def getFromComment(course_list, keyphrase):
     
     subreddit, keyphrase = initialize_bot()
     for comment in subreddit.stream.comments():
+        
+        if comment.id in replied_to:
+            continue
+        
         b = set()
-        if keyphrase in comment.body and len(comment.body) > 5:
+        if keyphrase in comment.body and len(comment.body) >= len(keyphrase):
             # TODO: Check all the professors from the set with the same course and suggest
             # the professor with the best rating
             checkForComment = True
             print("check for comment is true")
             print(comment.body)
             
-            if len(comment.body) < 6 : 
-                """                  
-                if comment in comments_read_list:                    
-                # comment.save()
-                    comments_read_list.add(comment)              
-                    getFromPost(course_list, keyphrase)
-                    """
+            if comment.body == keyphrase:
+                if not comment.saved:                                 
+                    post = comment.submission.selftext
+                    course_load = set()
+                    instructor_temp = ""
+                    for course_temp in course_list: 
+                        title = (course_temp.subject + " " +  course_temp.number)               
+                        if (course_temp.subject + " " + course_temp.number) in post:                            
+                            reply = bot_reply(title, course_temp.instructor) 
+                            print(reply)
+                            course_load.add(reply)                    
+                    print(course_load)
+                    for i in course_load:
+                        comment.reply(i)                   
+                    
+                comment.save()
+                replied_to.add(comment)               
                 continue        
-            
+                
             coursetitle = comment.body.replace(keyphrase, '')   # "!prof CS 173" becomes "CS 173"
             print(coursetitle.split())
             try:
@@ -135,37 +152,9 @@ def getFromComment(course_list, keyphrase):
 
                                 print()
                     instructors_shown = []
+        replied_to.add(comment.id)     
                     
-def getFromPost(course_list, keyphrase) :  
-    
-    
-    subreddit, keyphrase = initialize_bot()
-    comments_called = set()
-    print("Second reached")
-    for submission in subreddit.stream.submissions():             
-        b = set()
-        for course in course_list:            
-            course_check = course.subject + " " + course.number
-            if course.instructor != '' or course.instructor !=' ':            
-                instructor = course.instructor         
-            else :
-                continue
-            if (course_check, instructor) not in b:
-                b.add((course_check, instructor)) 
-            else :
-                continue
-            #print(course_check)
-            if course_check in submission.selftext:
-                for comment in submission.comments:                  
-                    if comment in comments_called :
-                        continue
-                    comments_called.add(comment.body)                                       
-                    bot_reply(course, instructor)
-    
-    
-
-    course_list = get_course_data()
-    get_from_comment(course_list, keyphrase)   
+ 
 
 if __name__ == '__main__':    
     while True:
