@@ -13,7 +13,7 @@ class Courses:
 
 
 # Contains the list of courses and its associated attributes
-course_list = set()
+course_list = list()
 
 
 # Reads and stores the course data in a set
@@ -33,7 +33,7 @@ def load_course_data(directory):
             instructor = row["Instructors"]
 
             # Creating a course instance and adding it to the set
-            course_list.add(Courses(subject, number, name, description, instructor))
+            course_list.append(Courses(subject, number, name, description, instructor))
 
 
 # Returns the course data

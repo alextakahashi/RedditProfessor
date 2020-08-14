@@ -86,8 +86,11 @@ def getFromComment(course_list, keyphrase):
             
             coursetitle = comment.body.replace(keyphrase, '')   # "!prof CS 173" becomes "CS 173"
             print(coursetitle.split())
-            coursesubj = coursetitle.split()[0]     # "CS"
-            coursenum = coursetitle.split()[1]      # "173"            
+            try:
+                coursesubj = coursetitle.split()[0]     # "CS"
+                coursenum = coursetitle.split()[1] 
+            except :
+                comment.reply("Please put spaces between words")     # "173"            
             print(coursetitle)
             for course in course_list:
                 if course.subject == coursesubj and course.number == coursenum:
@@ -95,6 +98,7 @@ def getFromComment(course_list, keyphrase):
                     if course.instructor != '' or course.instructor !=' ':            
                         instructor = course.instructor         
                     else :
+                        instructor = "unassigned"
                         continue
 
                     course_name = course.subject + " " + course.number
@@ -107,7 +111,9 @@ def getFromComment(course_list, keyphrase):
                                 scraper.retrieve_rmp_info()
                                 prof_rating = scraper.get_rmp_info()
                                 if prof_rating[0] == "T":
-                                    comment.reply(f"The professor teaching {course_name} is {instructor}."
+                                    if len(instructor) == 0 or len(instructor) == 1:
+                                        instructor = "not decided yet"                                    
+                                    comment.reply(f"The professor for this {course_name} is {instructor}."
                                         + f"\nHe/She doesn't exist in the RMP directory ")                                   
                                     comment.save()
                                     continue
