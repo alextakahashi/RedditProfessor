@@ -1,4 +1,6 @@
 ﻿# RedditProfessor
+ 
+ ![Gif Demo](assets/redditProfessorDemo.gif)
 
 **Authors**: 
 * Aniruddha G Pai - [`agpai2@illinois.edu`](mailto:agpai2@illinois.edu)
@@ -8,10 +10,22 @@
 ## About
 A reddit bot that displays information about the professor of a given course. This information provided will include the class rating, difficulty of class, and the percentage of students taking the class again.
 
-Summon by commenting !prof <class subject> <class title> to get the reviews of UIUC professors teaching any particular class, or commenting !prof under a post which contains a course name in its body.
+Summon by commenting...
+
+[comment]: <> (Does this only live in a certain subreddit?)
+
+```
+!prof <class subject> <class title> 
+```
+
+to get the reviews of UIUC professors teaching any particular class, or commenting `!prof` under a post which contains a course name in its body.
+
+```
+TODO: SAMPLE OUTPUT HERE
+```
 
 ## Why a Reddit bot?
-The UIUC subreddit is the biggest university subreddit in the U.S., with thousands of students asking about course advice, schedule checks and professor experiences every day. RateMyProfessor is used by college students all across the country to share their learning preferences, and the professor-student dynamic has become increasingly important in a virtual college setting.
+The UIUC subreddit [r/UIUC](https://www.reddit.com/r/UIUC/) is the biggest university subreddit in the U.S., with thousands of students asking about course advice, schedule checks and professor experiences every day. [RateMyProfessor](LINK) is used by college students all across the country to share their learning preferences, and the professor-student dynamic has become increasingly important in a virtual college setting.
 
 Being a premier public university, many UIUC professors have amassed student reviews, and we think that new students could benefit from the advice of their senior peers catalogued on their site. With such a strong correlation of RateMyProfessor and the topics discussed on r/UIUC, we are optimistic that the ability to quickly see instructor ratings by simply calling our bot is a convenient and helpful addition to the subreddit and UIUC students as a whole.
 
